@@ -3,8 +3,8 @@ package main
 import (
 	"flag"
 
-	"load_balancer/internal/config"
-	"load_balancer/internal/backend"
+	"github.com/jroderic-07/load-balancer/internal/config"
+	"github.com/jroderic-07/load-balancer/internal/backend"
 )
 
 func main() {

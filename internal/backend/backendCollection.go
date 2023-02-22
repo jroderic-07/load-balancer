@@ -1,7 +1,7 @@
 package backend
 
 import (
-	"load_balancer/internal/config"
+	"github.com/jroderic-07/load-balancer/internal/config"
 )
 
 type collection interface {
