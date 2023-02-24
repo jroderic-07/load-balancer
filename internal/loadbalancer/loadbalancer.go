@@ -32,7 +32,7 @@ func (l *LoadBalancer) getBackends() *backend.BackendCollection {
 	return l.backends
 }
 
-func (l *loadBalancer) checkBackends() {}
+func (l *LoadBalancer) checkBackends() {}
 
 func (l *LoadBalancer) Serve(lbi loadBalancer) {
 	s := http.Server {

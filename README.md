@@ -9,6 +9,26 @@ Clone the repository and build using the make file.
 ``` 
 
 ## Usage
+Default values are:
+- Port: :8080
+- config-file: data/config.json
+- lb-type: roundRobin
+
+Specify port:
+```bash
+	./bin/loadbalancer -port :8000
+```
+
+Specify configuration file:
+```bash
+	./bin/loadbalancer -config-file /tmp/test.json
+```
+
+Specify load balancing type:
+```bash
+	./bin/loadbalancer -lb-type roundRobin
+```
+
 For help, run:
 ```bash
 	./bin/loadbalancer --help
