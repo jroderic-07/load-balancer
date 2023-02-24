@@ -9,6 +9,7 @@ import (
 )
 
 func main() {
+	var port = flag.Int("port", 0, "port to run reverse proxy on")
 	var configFilePath = flag.String("config-file", "", "path to configuration file")
 	var loadBalancingType = flag.String("lb-type", "", "type of load balancing")
 
@@ -16,10 +17,9 @@ func main() {
 
 	test := config.New(*configFilePath)
 	test1 := backend.NewBackendCollection(test)
-	print(test1.Backends[1].GetURL())
 
 	if *loadBalancingType == "roundRobin" {
-		test2 := loadbalancer.NewRoundRobin()
+		test2 := loadbalancer.NewRoundRobin(*port, test1)
 		test2.LoadBalancer.Serve(test2)
 	}
 }

@@ -8,17 +8,17 @@ type collection interface {
 	createIterator() iterator
 }
 
-type backendCollection struct {
+type BackendCollection struct {
 	Backends []*Backend
 }
 
-func (b *backendCollection) createIterator() iterator {
+func (b *BackendCollection) createIterator() iterator {
 	return &backendIterator{
 		backends: b.Backends,
 	}
 }
 
-func NewBackendCollection(config *config.Config) *backendCollection {
+func NewBackendCollection(config *config.Config) *BackendCollection {
 	var backendSlice []*Backend
 
 	backends := config.GetBackends()
@@ -28,5 +28,9 @@ func NewBackendCollection(config *config.Config) *backendCollection {
 		backendSlice = append(backendSlice, backend)
 	}
 
-	return &backendCollection{Backends: backendSlice}
+	return &BackendCollection{Backends: backendSlice}
+}
+
+func (b *BackendCollection) GetBackends() []*Backend {
+	return b.Backends
 }
