@@ -8,6 +8,6 @@ func NewRoundRobin() *RoundRobin {
 	return &RoundRobin{}
 }
 
-func (r *RoundRobin) Test() {
-	print("tes tickles")
+func (r *RoundRobin) lbHandler() {
+	print("test")
 }

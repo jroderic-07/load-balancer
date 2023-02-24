@@ -4,8 +4,8 @@ import (
 	"github.com/jroderic-07/load-balancer/internal/backend"	
 )
 
-type loadBalancerInt interface {
-	Test()
+type loadBalancer interface {
+	lbHandler()
 }
 
 type LoadBalancer struct {
@@ -25,6 +25,6 @@ func (l *LoadBalancer) getBackends() []*backend.Backend {
 	return l.backends
 }
 
-func (l *LoadBalancer) Serve(lbi loadBalancerInt) {
-	lbi.Test()
+func (l *LoadBalancer) Serve(lbi loadBalancer) {
+	lbi.lbHandler()
 }
