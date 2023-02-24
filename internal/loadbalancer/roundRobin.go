@@ -11,34 +11,49 @@ import (
 
 type RoundRobin struct {
 	LoadBalancer
+	backendSize int
 	backendCounter int
 	mu sync.Mutex
 }
 
 func NewRoundRobin(port string, backends *backend.BackendCollection) *RoundRobin {
-	roundRobin := &RoundRobin{backendCounter: 0}
+	roundRobin := &RoundRobin{backendCounter: 0, backendSize: 3}
 	roundRobin.LoadBalancer.setPort(port)
-	roundRobin.LoadBalancer.setBackends(backends)
+	roundRobin.LoadBalancer.setBackends(backends.CreateIterator())
 
 	return roundRobin
 }
 
-func (r *RoundRobin) lbHandler(res http.ResponseWriter, req *http.Request) {
-	backendsLength := len(r.LoadBalancer.backends.Backends)
-	
-	r.mu.Lock()
+func (r *RoundRobin) checkCounter() {
+	if r.backendCounter >= r.backendSize {
+		r.backendCounter = 0
+		r.LoadBalancer.backends.ResetIndex()
+	}
+}
 
-	currentURL := r.LoadBalancer.backends.Backends[r.backendCounter].GetURL()
+func (r *RoundRobin) lbHandler(res http.ResponseWriter, req *http.Request) {
+	r.mu.Lock()
+	
+	currentBackend := r.LoadBalancer.backends.GetNext()
+	for (currentBackend.GetHealth() == false) {
+		r.backendCounter++
+		r.checkCounter()
+		currentBackend = r.LoadBalancer.backends.GetNext()
+	}
+
+	currentURL := currentBackend.GetURL()
 
 	r.mu.Unlock()
 
 	r.backendCounter++
-	if r.backendCounter >= backendsLength {
-		r.backendCounter = 0
-	}
-	
+	r.checkCounter()
+
 	parsedURL, _ := url.Parse(currentURL)
 	reverseProxy := httputil.NewSingleHostReverseProxy(parsedURL)
+
+	reverseProxy.ErrorHandler = func(w http.ResponseWriter, r *http.Request, e error){
+		currentBackend.SetUnhealthy()
+	}
 
 	req.Host = req.URL.Host 
 

@@ -1,12 +1,17 @@
 package backend
 
+import (
+	"sync"
+)
+
 type Backend struct {
 	url string
-	health bool
+	healthy bool
+	mu sync.RWMutex
 }
 
-func New(config_url string, config_health bool) *Backend {
-	return &Backend{url: config_url, health: config_health}
+func New(config_url string) *Backend {
+	return &Backend{url: config_url, healthy: true}
 }
 
 func (b *Backend) GetURL () string{
@@ -14,7 +19,9 @@ func (b *Backend) GetURL () string{
 }
 
 func (b *Backend) GetHealth() bool {
-	return b.health
+	return b.healthy
 }
 
-func (b *Backend) CheckHealth() {}
+func (b *Backend) SetUnhealthy() {
+	b.healthy = false
+}

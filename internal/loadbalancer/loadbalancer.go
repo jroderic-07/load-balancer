@@ -13,14 +13,14 @@ type loadBalancer interface {
 
 type LoadBalancer struct {
 	port string
-	backends *backend.BackendCollection
+	backends *backend.BackendIterator
 }
 
 func (l *LoadBalancer) setPort(portNo string) {
 	l.port = portNo
 }
 
-func (l *LoadBalancer) setBackends(backends *backend.BackendCollection) {
+func (l *LoadBalancer) setBackends(backends *backend.BackendIterator) {
 	l.backends = backends
 }
 
@@ -28,7 +28,7 @@ func (l *LoadBalancer) getPort() string {
 	return l.port
 }
 
-func (l *LoadBalancer) getBackends() *backend.BackendCollection {
+func (l *LoadBalancer) getBackends() *backend.BackendIterator {
 	return l.backends
 }
 
