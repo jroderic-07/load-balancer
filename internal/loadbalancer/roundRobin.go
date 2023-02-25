@@ -31,6 +31,10 @@ func (r *RoundRobin) checkCounter() {
 	}
 }
 
+func (r *RoundRobin) Serve() {
+	r.LoadBalancer.Serve(r)
+}
+
 func (r *RoundRobin) lbHandler(res http.ResponseWriter, req *http.Request) {
 	r.mu.Lock()
 	

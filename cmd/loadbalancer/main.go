@@ -20,6 +20,6 @@ func main() {
 
 	if *loadBalancingType == "roundRobin" {
 		lb := loadbalancer.NewRoundRobin(*port, backends)
-		lb.LoadBalancer.Serve(lb)
+		lb.Serve()
 	}
 }

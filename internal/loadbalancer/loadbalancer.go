@@ -9,6 +9,7 @@ import (
 
 type loadBalancer interface {
 	lbHandler(w http.ResponseWriter, rq *http.Request)
+	Serve()
 }
 
 type LoadBalancer struct {
