@@ -25,16 +25,6 @@ func (l *LoadBalancer) setBackends(backends *backend.BackendIterator) {
 	l.backends = backends
 }
 
-func (l *LoadBalancer) getPort() string {
-	return l.port
-}
-
-func (l *LoadBalancer) getBackends() *backend.BackendIterator {
-	return l.backends
-}
-
-func (l *LoadBalancer) checkBackends() {}
-
 func (l *LoadBalancer) Serve(lbi loadBalancer) {
 	s := http.Server {
 		Addr: l.port, 

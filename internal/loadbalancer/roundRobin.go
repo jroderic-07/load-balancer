@@ -17,11 +17,16 @@ type RoundRobin struct {
 }
 
 func NewRoundRobin(port string, backends *backend.BackendCollection) *RoundRobin {
-	roundRobin := &RoundRobin{backendCounter: 0, backendSize: 3}
+	roundRobin := &RoundRobin{}
 	roundRobin.LoadBalancer.setPort(port)
 	roundRobin.LoadBalancer.setBackends(backends.CreateIterator())
+	roundRobin.setBackendSize(len(roundRobin.LoadBalancer.backends.Backends))
 
 	return roundRobin
+}
+
+func (r *RoundRobin) setBackendSize(backendSize int){
+	r.backendSize = backendSize
 }
 
 func (r *RoundRobin) checkCounter() {
