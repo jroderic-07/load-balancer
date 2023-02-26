@@ -2,28 +2,33 @@ package backend
 
 type iterator interface {
 	hasNext() bool
-	getNext() *Backend
+	GetNext() *Backend
+	ResetIndex()
 }
 
-type backendIterator struct {
+type BackendIterator struct {
 	index int
-	backends []*Backend
+	Backends []*Backend
 }
 
-func (b *backendIterator) hasNext() bool {
-	if b.index < len(b.backends){
+func (b *BackendIterator) hasNext() bool {
+	if b.index < len(b.Backends){
 		return true
 	}
 
 	return false
 }
 
-func (b *backendIterator) getNext() *Backend {
+func (b *BackendIterator) GetNext() *Backend {
 	if b.hasNext() {
-		backend := b.backends[b.index]
+		backend := b.Backends[b.index]
 		b.index++
 		return backend
 	}
 	
 	return nil
+}
+
+func (b *BackendIterator) ResetIndex() {
+	b.index = 0
 }

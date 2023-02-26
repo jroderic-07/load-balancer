@@ -9,17 +9,17 @@ import (
 )
 
 func main() {
-	var configFilePath = flag.String("config-file", "", "path to configuration file")
-	var loadBalancingType = flag.String("lb-type", "", "type of load balancing")
+	var port = flag.String("port", ":8080", "port to run reverse proxy on")
+	var configFilePath = flag.String("config-file", "data/config.json", "path to configuration file")
+	var loadBalancingType = flag.String("lb-type", "roundRobin", "type of load balancing")
 
 	flag.Parse()
 
-	test := config.New(*configFilePath)
-	test1 := backend.NewBackendCollection(test)
-	print(test1.Backends[1].GetURL())
+	configuration := config.New(*configFilePath)
+	backends := backend.NewBackendCollection(configuration)
 
 	if *loadBalancingType == "roundRobin" {
-		test2 := loadbalancer.NewRoundRobin()
-		test2.LoadBalancer.Serve(test2)
+		lb := loadbalancer.NewRoundRobin(*port, backends)
+		lb.Serve()
 	}
 }
